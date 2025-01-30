@@ -5,6 +5,7 @@ namespace TicketBookingCore.Tests
 {
     public class TicketBookingRequestProcessorTests
     {
+        private readonly TicketBookingRequest _request;
         private readonly Mock<ITicketBookingRepository> _ticketBookingRepositoryMock;
         private readonly TicketBookingRequestProcessor _processor;
 
@@ -12,34 +13,26 @@ namespace TicketBookingCore.Tests
         {
             _ticketBookingRepositoryMock = new Mock<ITicketBookingRepository>();
             _processor = new TicketBookingRequestProcessor(_ticketBookingRepositoryMock.Object);
+            _request = new TicketBookingRequest();
             
         }
 
         [Fact]
         public void ShouldReturnTicketBookingResultWithRequestValues()
         {
-            
-            var request = new TicketBookingRequest
-            {
-                FirstName = "Anton",
-                LastName = "Johansson",
-                Email = "anton@gmail.se"
-            };
-
             // Act
-            TicketBookingResponse response = _processor.Book(request);
+            TicketBookingResponse response = _processor.Book(_request);
 
             // Assert
             Assert.NotNull(response);
-            Assert.Equal(request.FirstName, response.FirstName);
-            Assert.Equal(request.LastName, response.LastName);
-            Assert.Equal(request.Email, response.Email);
+            Assert.Equal(_request.FirstName, response.FirstName);
+            Assert.Equal(_request.LastName, response.LastName);
+            Assert.Equal(_request.Email, response.Email);
         }
 
         [Fact]
         public void ShouldThrowExceptionIfRequestIsNull()
         {
-           
             // Act
             var exception = Assert.Throws<ArgumentNullException>(() => _processor.Book(null));
 
@@ -60,21 +53,14 @@ namespace TicketBookingCore.Tests
                     savedTicketBooking = ticketBooking;
                 });
             
-            var request = new TicketBookingRequest
-            {
-                FirstName = "Anton",
-                LastName = "Johansson",
-                Email = "anton@gmail.se"
-            };
-
             //Act
-            TicketBookingResponse response = _processor.Book(request);
+            TicketBookingResponse response = _processor.Book(_request);
 
             //Assert
             Assert.NotNull(savedTicketBooking);
-            Assert.Equal(request.FirstName, savedTicketBooking.FirstName);
-            Assert.Equal(request.LastName, savedTicketBooking.LastName);
-            Assert.Equal(request.Email, savedTicketBooking.Email);
+            Assert.Equal(_request.FirstName, savedTicketBooking.FirstName);
+            Assert.Equal(_request.LastName, savedTicketBooking.LastName);
+            Assert.Equal(_request.Email, savedTicketBooking.Email);
 
         }
     }
