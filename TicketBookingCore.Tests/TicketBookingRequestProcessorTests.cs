@@ -13,7 +13,12 @@ namespace TicketBookingCore.Tests
         {
             _ticketBookingRepositoryMock = new Mock<ITicketBookingRepository>();
             _processor = new TicketBookingRequestProcessor(_ticketBookingRepositoryMock.Object);
-            _request = new TicketBookingRequest();
+            _request = new TicketBookingRequest 
+            {
+                FirstName = "Anton",
+                LastName = "Johansson",
+                Email = "anton@gmail.se"
+            };
             
         }
 
@@ -52,9 +57,11 @@ namespace TicketBookingCore.Tests
                 {
                     savedTicketBooking = ticketBooking;
                 });
-            
+
             //Act
-            TicketBookingResponse response = _processor.Book(_request);
+            _processor.Book(_request);
+            _ticketBookingRepositoryMock.Verify(x => x.Save(It.IsAny<TicketBooking>()), Times.Once);
+
 
             //Assert
             Assert.NotNull(savedTicketBooking);
