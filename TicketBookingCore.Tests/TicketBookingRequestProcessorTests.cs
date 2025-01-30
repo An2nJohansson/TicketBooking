@@ -64,7 +64,7 @@ namespace TicketBookingCore.Tests
             {
                 FirstName = "Anton",
                 LastName = "Johansson",
-                Email = "anton@gmail.com"
+                Email = "anton@gmail.se"
             };
 
             //Act
